@@ -4,9 +4,6 @@ S_DIR="/media/usbshare/private_backup"
 DIRS="Archive Docs Photos"
 S3_BUCKET="my-deep-archive"
 S3_STORAGE_CLASS="DEEP_ARCHIVE"
-# or sozinov-archive and GLACIER
-# S3_BUCKET="my-archive"
-# S3_STORAGE_CLASS="GLACIER"
 
 DATE=`date '+%Y%m%d%H%M%S'`
 

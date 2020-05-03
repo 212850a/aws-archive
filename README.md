@@ -1,5 +1,6 @@
+# aws-archive
 ## Overview
-This instruction describes the way how to store your really important backups in encrypted format in AWS and pay for that really small (1$ per 1PB in a month).
+This instruction describes the way how to store your really important backups in encrypted format in AWS Glacier Deep Archive and pay for that really small (1$ per 1PB in a month).
 
 ## Preparations
 ### S3 bucket
@@ -61,7 +62,7 @@ Create S3 Bucket (no private access, disable object lock - default ones), let's 
     ]
 }
 ```
-3. Assign created policies for your `archiver` user
+3. Assign created policies for your `archiver` user via AWS IAM.
 
 ### AWS Command Line Interface
 Install AWS CLI with PIP - it's recommended as GLACIER and DEEP_ARCHIVE as storage options are available since 2019 only and if you use old stable OS release (as example Ubuntu 18.04), the version of AWS CLI from package manager may not have this functionality still.
@@ -82,9 +83,11 @@ Default region name [None]: eu-west-1
 Default output format [None]: table
 ```
 I use eu-west-1 (Ireland) as GLACIER and GLACIER DEEP ARCHIVE are the cheapest there and in Stockholm either as per [Amazon S3 pricing](https://aws.amazon.com/s3/pricing/).
+
 Additionally [CloudHarmony AWS Network Test S3](https://cloudharmony.com/speedtest-for-aws:s3) gives me the best results for latency and downlink for eu-west-1 from Lithuania, Vilnius where I'm based today.
 ### Duplicity
 [Duplicity](http://duplicity.nongnu.org/) is the tool which will be used to create encrypted (with gpg) backup archives which then with a help of aws cli will be sent to AWS Glacier (or Glacier Deep Archive). 
+
 Duplicity can itself send data to S3, but not to Glacier or Glacier Deep Archive yet.
 ```apt-get install duplicity -y```
 
@@ -118,7 +121,7 @@ do
 done
 ```
 ### s3_sync_archive.sh
-Second stage is to sync encrypted archives to AWS Glacier (Deep Archive)
+Second stage is to sync encrypted archives to AWS Glacier Deep Archive.
 ```
 $ cat s3_sync_archive.sh
 #!/bin/bash
@@ -127,9 +130,6 @@ S_DIR="/media/usbshare/private_backup"
 DIRS="Archive Docs Photos"
 S3_BUCKET="my-deep-archive"
 S3_STORAGE_CLASS="DEEP_ARCHIVE"
-# or sozinov-archive and GLACIER
-# S3_BUCKET="my-archive"
-# S3_STORAGE_CLASS="GLACIER"
 
 DATE=`date '+%Y%m%d%H%M%S'`
 

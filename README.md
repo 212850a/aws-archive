@@ -1,6 +1,6 @@
 # aws-archive
 ## Overview
-This instruction describes the way how to store your really important backups in encrypted format in AWS Glacier Deep Archive and pay for that really small (1$ per 1PB in a month).
+This instruction describes the way how to store your really important backups in encrypted format in AWS Glacier Deep Archive and pay for that really small (1$ per 1PB in a month). More details - [AWS Glacier Deep Archive as off-site backup solution](http://212850a.github.io/2020/12/20/AWS-Glacier.html)
 
 ## Preparations
 ### S3 bucket

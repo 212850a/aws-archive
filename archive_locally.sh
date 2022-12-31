@@ -18,7 +18,12 @@ echo
 echo "Archiving the following subdirs from ${S_DIR}: ${DIRS}"
 for dir in ${DIRS} 
 do
-        echo duplicity --volsize ${VOLSIZE} ${S_DIR}/${dir} file://${D_DIR}/${dir}
-        echo duplicity --volsize ${VOLSIZE} ${S_DIR}/${dir} file://${D_DIR}/${dir} >> ${D_DIR}/archive.${DATE}.log
-        duplicity --volsize ${VOLSIZE} ${S_DIR}/${dir} file://${D_DIR}/${dir} >> ${D_DIR}/archive.${DATE}.log 2>&1
+        CHANGES=`duplicity --dry-run --allow-source-mismatch --volsize ${VOLSIZE} ${S_DIR}/${dir} file://${D_DIR}/${dir} | grep DeltaEntries | sed "s/DeltaEntries //"`
+	if [ "$CHANGES" == "0" ]; then
+        	echo "No changes detected in ${dir}, skipping"
+        else
+        	echo duplicity --allow-source-mismatch --volsize ${VOLSIZE} ${S_DIR}/${dir} file://${D_DIR}/${dir}
+        	echo duplicity --allow-source-mismatch --volsize ${VOLSIZE} ${S_DIR}/${dir} file://${D_DIR}/${dir} >> ${D_DIR}/archive.${DATE}.log
+        	duplicity --allow-source-mismatch --volsize ${VOLSIZE} ${S_DIR}/${dir} file://${D_DIR}/${dir} >> ${D_DIR}/archive.${DATE}.log 2>&1
+	fi
 done
